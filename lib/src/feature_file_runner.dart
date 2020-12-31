@@ -317,6 +317,7 @@ class FeatureFileRunner {
       result = await _runWithinTest<StepResult>(
         step.name,
         () async => code.step.run(
+          step.name,
           world,
           _reporter,
           _config.defaultTimeout,

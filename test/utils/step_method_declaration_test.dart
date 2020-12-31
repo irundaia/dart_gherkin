@@ -18,7 +18,7 @@ void main() {
       );
 
       await stepMethod
-          .run(null, null, const Duration(seconds: 10), [parameter1Value]);
+          .run(null, null, null, const Duration(seconds: 10), [parameter1Value]);
       expect(parameter1GivenValue, parameter1Value);
     });
 
@@ -35,7 +35,7 @@ void main() {
       );
 
       await stepMethod
-          .run(customWorld, null, const Duration(seconds: 10), [1, '2']);
+          .run(null, customWorld, null, const Duration(seconds: 10), [1, '2']);
       expect(receivedWorld, customWorld);
     });
   });

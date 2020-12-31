@@ -15,7 +15,7 @@ class StepDefinitionMock extends StepDefinitionGeneric<World> {
       : super(config, expectParameterCount);
 
   @override
-  Future<void> onRun(Iterable parameters) async {
+  Future<void> onRun(String name, Iterable parameters) async {
     invocationCount += 1;
     if (code != null) {
       await code();
@@ -33,7 +33,7 @@ void main() {
         final step = StepDefinitionMock(StepDefinitionConfiguration(), 2);
         expect(
             () async => await step.run(
-                null, null, const Duration(seconds: 1), const Iterable.empty()),
+                null, null, null, const Duration(seconds: 1), const Iterable.empty()),
             throwsA((e) =>
                 e is GherkinStepParameterMismatchException &&
                 e.message ==
@@ -48,7 +48,7 @@ void main() {
         final step = StepDefinitionMock(StepDefinitionConfiguration(), 2);
         expect(
             () async =>
-                await step.run(null, null, const Duration(seconds: 1), [1]),
+                await step.run(null, null, null, const Duration(seconds: 1), [1]),
             throwsA((e) =>
                 e is GherkinStepParameterMismatchException &&
                 e.message ==
@@ -59,7 +59,7 @@ void main() {
 
       test('runs step when correct number of parameters provided', () async {
         final step = StepDefinitionMock(StepDefinitionConfiguration(), 1);
-        await step.run(null, null, const Duration(seconds: 1), [1]);
+        await step.run(null, null, null, const Duration(seconds: 1), [1]);
         expect(step.invocationCount, 1);
       });
     });
@@ -70,7 +70,7 @@ void main() {
         final step = StepDefinitionMock(
             StepDefinitionConfiguration(), 0, () async => throw Exception('1'));
         expect(
-            await step.run(null, null, const Duration(milliseconds: 1),
+            await step.run(null, null, null, const Duration(milliseconds: 1),
                 const Iterable.empty()), (r) {
           return r is ErroredStepResult &&
               r.result == StepExecutionResult.error &&
@@ -85,7 +85,7 @@ void main() {
         final step = StepDefinitionMock(StepDefinitionConfiguration(), 0,
             () async => throw TestFailure('1'));
         expect(
-            await step.run(null, null, const Duration(milliseconds: 1),
+            await step.run(null, null, null, const Duration(milliseconds: 1),
                 const Iterable.empty()), (r) {
           return r is StepResult &&
               r.result == StepExecutionResult.fail &&

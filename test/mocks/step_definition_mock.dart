@@ -16,7 +16,7 @@ class MockStepDefinition extends StepDefinitionBase<World> {
         );
 
   @override
-  Future<void> onRun(Iterable parameters) async {
+  Future<void> onRun(String name, Iterable parameters) async {
     hasRun = true;
     runCount += 1;
     if (code != null) {

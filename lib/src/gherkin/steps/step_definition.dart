@@ -24,6 +24,7 @@ abstract class StepDefinitionGeneric<TWorld extends World> {
   Reporter get reporter => _reporter;
 
   Future<StepResult> run(
+    String name,
     TWorld world,
     Reporter reporter,
     Duration defaultTimeout,
@@ -37,7 +38,7 @@ abstract class StepDefinitionGeneric<TWorld extends World> {
           _world = world;
           _reporter = reporter;
           _timeout = _timeout ?? defaultTimeout;
-          final result = await onRun(parameters).timeout(_timeout);
+          final result = await onRun(name, parameters).timeout(_timeout);
           return result;
         },
         (ms) => elapsedMilliseconds = ms,
@@ -74,7 +75,7 @@ abstract class StepDefinitionGeneric<TWorld extends World> {
     return StepResult(elapsedMilliseconds, StepExecutionResult.pass);
   }
 
-  Future<void> onRun(Iterable<dynamic> parameters);
+  Future<void> onRun(String name, Iterable<dynamic> parameters);
 
   void _ensureParameterCount(int actual, int expected) {
     if (actual != expected) {

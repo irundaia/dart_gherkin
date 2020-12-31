@@ -35,7 +35,7 @@ abstract class StepDefinition<TWorld extends World>
       : super(configuration, 0);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async => await executeStep();
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async => await executeStep();
 
   Future<void> executeStep();
 }
@@ -46,7 +46,7 @@ abstract class StepDefinition1<TWorld extends World, TInput1>
       : super(configuration, 1);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async =>
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async =>
       await executeStep(parameters.elementAt(0));
 
   Future<void> executeStep(TInput1 input1);
@@ -58,7 +58,7 @@ abstract class StepDefinition2<TWorld extends World, TInput1, TInput2>
       : super(configuration, 2);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async => await executeStep(
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async => await executeStep(
         parameters.elementAt(0),
         parameters.elementAt(1),
       );
@@ -75,7 +75,7 @@ abstract class StepDefinition3<TWorld extends World, TInput1, TInput2, TInput3>
       : super(configuration, 3);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async => await executeStep(
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async => await executeStep(
         parameters.elementAt(0),
         parameters.elementAt(1),
         parameters.elementAt(2),
@@ -94,7 +94,7 @@ abstract class StepDefinition4<TWorld extends World, TInput1, TInput2, TInput3,
       : super(configuration, 4);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async => await executeStep(
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async => await executeStep(
         parameters.elementAt(0),
         parameters.elementAt(1),
         parameters.elementAt(2),
@@ -115,7 +115,7 @@ abstract class StepDefinition5<TWorld extends World, TInput1, TInput2, TInput3,
       : super(configuration, 5);
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) async => await executeStep(
+  Future<void> onRun(String name, Iterable<dynamic> parameters) async => await executeStep(
         parameters.elementAt(0),
         parameters.elementAt(1),
         parameters.elementAt(2),
@@ -135,11 +135,13 @@ abstract class StepDefinition5<TWorld extends World, TInput1, TInput2, TInput3,
 /// Class that contains the contextual information when a step is run
 /// Provides access to the world, reporter, step configuration and expect functions.
 class StepContext<TWorld extends World> {
+  final String name;
   final TWorld world;
   final Reporter reporter;
   final StepDefinitionConfiguration configuration;
 
   StepContext(
+    this.name,
     this.world,
     this.reporter,
     this.configuration,
@@ -184,7 +186,7 @@ class GenericFunctionStepDefinition<TWorld extends World>
         );
 
   @override
-  Future<void> onRun(Iterable<dynamic> parameters) {
+  Future<void> onRun(String name, Iterable<dynamic> parameters) {
     var setupConfig = config;
 
     if (setupConfig == null || setupConfig.timeout == null) {
@@ -195,6 +197,7 @@ class GenericFunctionStepDefinition<TWorld extends World>
     final methodParams = [
       ...parameters.take(_expectedParameterCount),
       StepContext<TWorld>(
+        name,
         world,
         reporter,
         setupConfig,
